@@ -22,49 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import class Dispatch.DispatchQueue
-
-public class Stream<T> {
+internal struct StreamHistory<T> {
 	
-	private var handler: ((T) -> Void)?
-	private let queue: DispatchQueue?
-	private var _history: StreamHistory<T>
+	internal let maxSize: UInt32
+	internal var values: [T]
 	
-	public init(queue: DispatchQueue? = nil, historySize: UInt32 = 0) {
-		self.queue = queue
-		self._history = .init(maxSize: historySize, values: [])
-	}
-	
-	public func emitValue(_ newValue: T) {
-		queue.asyncIfNotNil { [weak self] in
-			guard let self = self else { return }
-			self.handler?(newValue)
-			if self.handler != nil {
-				self._history.addValue(newValue)
-			}
+	internal mutating func addValue(_ value: T) {
+		guard maxSize > 0 else { return }
+		if values.count == maxSize {
+			values.removeFirst()
 		}
-	}
-	
-	public func listen(_ handler: @escaping (T) -> Void) {
-		queue.asyncIfNotNil { [weak self] in
-			self?.handler = handler
-		}
-	}
-	
-	public func removeListener() {
-		queue.asyncIfNotNil { [weak self] in
-			self?.handler = nil
-		}
-	}
-	
-	public func history(_ completionHandler: @escaping ([T]) -> Void) {
-		queue.asyncIfNotNil { [weak self] in
-			guard let self = self else { return }
-			completionHandler(self._history.values)
-		}
-	}
-	
-	deinit {
-		self.handler = nil
+		values.append(value)
 	}
 }
