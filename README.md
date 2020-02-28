@@ -40,13 +40,13 @@ enum State {
 let stream2 = BroadcastStream<State>(queue: myQueue, historySize: 5) // or other queue
 
 stream2.addListener(identifiedBy: 0) { newValue in
-    print(newValue)
+    print(newValue)  // .idle ... .doingSomething ... .finished
 }
 
 stream2.emitValue(.idle)
 
 stream2.addListener(identifiedBy: "my other listener") { newValue in
-    print(newValue) // .idle ... .doingSomething ... .finished
+    print(newValue) // .doingSomething ... .finished
 }
 
 stream2.emitValue(.doingSomething)
