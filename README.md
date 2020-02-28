@@ -19,7 +19,7 @@ let myQueue = DispatchQueue(label: "streamQueue1")
 let stream = Streams.Stream<Int>(queue: myQueue, historySize: 2)
 
 stream.listen { newValue in
-    print(newValue)
+    print(newValue) // 72 ... 73 ... 12
 }
 
 stream.emitValue(72)
@@ -46,7 +46,7 @@ stream2.addListener(identifiedBy: 0) { newValue in
 stream2.emitValue(.idle)
 
 stream2.addListener(identifiedBy: "my other listener") { newValue in
-    print(newValue)
+    print(newValue) // .idle ... .doingSomething ... .finished
 }
 
 stream2.emitValue(.doingSomething)
