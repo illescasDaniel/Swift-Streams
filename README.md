@@ -57,7 +57,7 @@ myQueue.asyncAfter(deadline: .now() + .seconds(1)) {
 
 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
     stream2.history { values in
-    print(values) // [.idle, .doingSomething, .finished]
+        print(values) // [.idle, .doingSomething, .finished]
     }
 }
 ```
