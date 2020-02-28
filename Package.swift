@@ -21,6 +21,8 @@ let package = Package(
         .target(
             name: "Streams",
             dependencies: []),
+		.target(name: "Run",
+			dependencies: ["Streams"]),
         .testTarget(
             name: "StreamsTests",
             dependencies: ["Streams"]),
